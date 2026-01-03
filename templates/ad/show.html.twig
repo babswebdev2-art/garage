@@ -1,0 +1,68 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ ad.title }}{% endblock %}
+
+{% block body %}
+    <div class="ad-title" style="background-image: url({{ ad.coverImage }}); background-size: cover; background-position: center; height: 400px;">
+        <div class="container h-100 d-flex flex-column justify-content-end pb-4">
+            <h1 class="text-white bg-dark d-inline-block p-2">{{ ad.title }}</h1>
+            <h2 class="text-white bg-primary d-inline-block p-2">{{ ad.price|number_format(0, ',', ' ') }} €</h2>
+        </div>
+    </div>
+
+    <div class="container mt-5">
+        <div class="row">
+            <div class="col-md-8">
+                <h3>Description</h3>
+                {{ ad.content|raw }}
+
+                <h3 class="mt-4">Galerie d'images</h3>
+                <div id="carouselExampleIndicators" class="carousel slide shadow mb-5" data-bs-ride="carousel">
+                    <div class="carousel-inner">
+                        {% for image in ad.images %}
+                            <div class="carousel-item {{ loop.first ? 'active' : '' }}">
+                                <img src="{{ image.url }}" class="d-block w-100" alt="{{ image.caption }}">
+                                <div class="carousel-caption d-none d-md-block bg-dark-50">
+                                    <p>{{ image.caption }}</p>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                    <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
+                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    </button>
+                    <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="next">
+                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    </button>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="card border-primary mb-3">
+                    <div class="card-header bg-primary text-white text-center">
+                        <h5>Caractéristiques</h5>
+                    </div>
+                    <div class="card-body">
+                        <ul class="list-group list-group-flush">
+                            <li class="list-group-item"><strong>Marque :</strong> {{ ad.brand.name }}</li>
+                            <li class="list-group-item"><strong>Kilométrage :</strong> {{ ad.km }} km</li>
+                            <li class="list-group-item"><strong>Année :</strong> {{ ad.annee }}</li>
+                            <li class="list-group-item"><strong>Puissance :</strong> {{ ad.puissance }} ch</li>
+                            <li class="list-group-item"><strong>Propriétaires :</strong> {{ ad.nbProprietaires }}</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="card bg-light">
+                    <div class="card-body text-center">
+                        <a href="{{ path('user_show', {'slug': ad.author.slug}) }}">
+                            <img src="{{ ad.author.picture }}" class="avatar avatar-medium mb-3" alt="{{ ad.author.fullName }}">
+                        </a>
+                        <h5><a href="{{ path('user_show', {'slug': ad.author.slug}) }}">{{ ad.author.fullName }}</a></h5>
+                        <span class="badge bg-info">{{ ad.author.ads|length }} annonces</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

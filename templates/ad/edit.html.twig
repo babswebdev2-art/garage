@@ -1,0 +1,115 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Modification de l'annonce : {{ ad.title }}{% endblock %}
+
+{% form_theme myForm _self %}
+
+{% block body %}
+    <div class="container mt-5">
+        <h1 class="mb-5">Modifier l'annonce : <span class="text-primary">{{ ad.title }}</span></h1>
+
+        {{ form_start(myForm) }}
+        <div class="row">
+
+            <div class="col-md-8">
+
+                <div class="bg-light p-4 rounded shadow-sm mb-4">
+                    <h2>Informations générales</h2>
+                    <hr>
+                    {{ form_row(myForm.title) }}
+                    {{ form_row(myForm.coverImage) }}
+                    {{ form_row(myForm.introduction) }}
+                    {{ form_row(myForm.content) }}
+                    {{ form_row(myForm.price) }}
+
+                </div>
+
+                <div class="bg-light p-4 rounded shadow-sm mb-4">
+                    <h2>Galerie d'images</h2>
+                    <hr>
+
+                    {# Gestion affichage de la collection d'images #}
+                    {{ form_row(myForm.images) }}
+
+                    <input type="hidden" id="widgets-counter" value="{{ ad.images|length }}">
+
+                    <button type="button" id="add-image" class="btn btn-info mt-3">
+                        <i class="fas fa-plus"></i> Ajouter une image supplémentaire
+                    </button>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="bg-light p-4 rounded shadow-sm">
+                    <h2>Caractéristiques</h2>
+                    <hr>
+                    {{ form_row(myForm.kilometers) }}
+                    {{ form_row(myForm.year) }}
+                    {{ form_row(myForm.fuel) }}
+                    {{ form_row(myForm.transmission) }}
+                    {{ form_row(myForm.power) }}
+                    {{ form_row(myForm.displacement) }}
+                    {{ form_row(myForm.ownersCount) }}
+                </div>
+
+                <div class="mt-4">
+                    <button type="submit" class="btn btn-success btn-lg w-100">
+                        <i class="fas fa-save"></i> Enregistrer les modifications
+                    </button>
+                    <a href="{{ path('ads_show', {'slug': ad.slug}) }}" class="btn btn-link w-100 mt-2">Annuler</a>
+                </div>
+            </div>
+        </div>
+        {{ form_end(myForm) }}
+    </div>
+{% endblock %}
+
+{# Thème pour personnaliser l'affichage de chaque bloc image dans la collection #}
+{% block _ad_images_entry_row %}
+    <div class="form-group mb-3" id="block_{{ id }}">
+        <div class="row align-items-end">
+            <div class="col-10">
+                {{ form_widget(form) }}
+            </div>
+            <div class="col-2">
+                <button type="button" data-action="delete" data-target="#block_{{ id }}" class="btn btn-danger">
+                    <i class="fas fa-trash"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    {# On réutilise le même script que pour la création pour rendre le bouton "Ajouter" fonctionnel #}
+    <script>
+        const addImage = document.querySelector('#add-image');
+
+        if (addImage) {
+            addImage.addEventListener('click', () => {
+                const widgetCounter = document.querySelector('#widgets-counter');
+                const index = +widgetCounter.value;
+                const annonceImages = document.querySelector('#ad_images');
+
+                // Récupération du prototype
+                const prototype = annonceImages.dataset.prototype.replace(/__name__/g, index);
+
+                annonceImages.insertAdjacentHTML('beforeend', prototype);
+                widgetCounter.value = index + 1;
+
+                handleDeleteButtons();
+            });
+        }
+
+        function handleDeleteButtons() {
+            document.querySelectorAll('button[data-action="delete"]').forEach(button => {
+                button.addEventListener('click', function() {
+                    const target = this.dataset.target;
+                    document.querySelector(target).remove();
+                });
+            });
+        }
+
+        handleDeleteButtons();
+    </script>
+{% endblock %}
