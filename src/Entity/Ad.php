@@ -3,38 +3,27 @@
 namespace App\Entity;
 
 use App\Repository\AdRepository;
-use Cocur\Slugify\Slugify;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Validator\Constraints as Assert;
+use Cocur\Slugify\Slugify;
 
 #[ORM\Entity(repositoryClass: AdRepository::class)]
-#[ORM\HasLifecycleCallbacks()] //Automatiser du slug
+#[ORM\HasLifecycleCallbacks]
 class Ad
 {
-    #[ORM\Id]
-    #[ORM\GeneratedValue]
-    #[ORM\Column]
+    #[ORM\Id, ORM\GeneratedValue, ORM\Column]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    #[Assert\NotBlank(message: "Le titre est obligatoire")]
     private ?string $title = null;
 
-    #[ORM\Column(type: Types::TEXT)]
+    #[ORM\Column(length: 255)]
     private ?string $slug = null;
 
-    #[ORM\Column(length: 255)]
-    private ?string $model = null;
-
-    #[ORM\Column(type: Types::TEXT)]
-    private ?string $description = null;
-
     #[ORM\Column]
-    #[Assert\Positive(message: "Le prix doit être un nombre positif")]
-    private ?int $price = null;
+    private ?float $price = null;
 
     #[ORM\Column]
     private ?int $km = null;
@@ -42,40 +31,40 @@ class Ad
     #[ORM\Column(length: 255)]
     private ?string $coverImage = null;
 
-    #[ORM\Column]
-    private ?int $annee = null;
-
-    #[ORM\Column]
-    private ?int $nbProprietaires = null;
+    #[ORM\Column(type: Types::TEXT)]
+    private ?string $description = null;
 
     #[ORM\Column(length: 255)]
-    private ?string $cylindree = null;
+    private ?string $brand = null;
+
+    #[ORM\Column(length: 255)]
+    private ?string $model = null;
 
     #[ORM\Column]
-    private ?int $puissance = null;
+    private ?int $owners = null;
 
-    #[ORM\Column(length: 255)]
-    private ?string $carburant = null;
+    #[ORM\Column(length: 100)]
+    private ?string $engine = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column]
+    private ?int $power = null;
+
+    #[ORM\Column(length: 100)]
+    private ?string $fuel = null;
+
+    #[ORM\Column]
+    private ?int $year = null;
+
+    #[ORM\Column(length: 100)]
     private ?string $transmission = null;
 
     #[ORM\Column(type: Types::TEXT)]
     private ?string $options = null;
 
-    #[ORM\ManyToOne(targetEntity: Brand::class, inversedBy: 'ads')]
-    #[ORM\JoinColumn(nullable: false)]
-    private ?Brand $brand = null;
-
-    // Relation vers l'Auteur (L'Admin qui crée l'annonce)
     #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'ads')]
-    #[ORM\JoinColumn(nullable: false)]
     private ?User $author = null;
 
-    /**
-     * @var Collection<int, Image>
-     */
-    #[ORM\OneToMany(targetEntity: Image::class, mappedBy: 'ad', orphanRemoval: true)]
+    #[ORM\OneToMany(mappedBy: 'ad', targetEntity: Image::class, orphanRemoval: true, cascade: ['persist'])]
     private Collection $images;
 
     public function __construct()
@@ -84,240 +73,77 @@ class Ad
     }
 
     /**
-     * Permet d'initialiser le slug automatiquement avant la création ou modification
+     * Permet d'initialiser le slug automatiquement avant la sauvegarde
      */
     #[ORM\PrePersist]
     #[ORM\PreUpdate]
-    public function initializeSlug(): void
-    {
+    public function initializeSlug(): void {
         if (empty($this->slug)) {
             $slugify = new Slugify();
-            $this->slug = $slugify->slugify($this->title);
+            // On crée un slug basé sur la marque et le modèle pour le SEO
+            $this->slug = $slugify->slugify($this->brand . " " . $this->model . " " . uniqid());
         }
     }
 
-    // --- GETTERS & SETTERS ---
+    /* --- GETTERS ET SETTERS --- */
 
-    public function getId(): ?int
+    public function getId(): ?int { return $this->id; }
 
-    {
-        return $this->id;
-    }
-
-    public function getTitle(): ?string
-
-    {
-        return $this->title;
-    }
-    public function setTitle(string $title): static
-
-    {
+    public function getTitle(): ?string { return $this->title; }
+    public function setTitle(string $title): self {
         $this->title = $title;
-
         return $this;
     }
 
-    public function getSlug(): ?string
+    public function getSlug(): ?string { return $this->slug; }
+    public function setSlug(string $slug): self { $this->slug = $slug; return $this; }
 
-    {
-        return $this->slug;
-    }
-    public function setSlug(string $slug): static
+    public function getPrice(): ?float { return $this->price; }
+    public function setPrice(float $price): self { $this->price = $price; return $this; }
 
-    {
-        $this->slug = $slug;
+    public function getKm(): ?int { return $this->km; }
+    public function setKm(int $km): self { $this->km = $km; return $this; }
 
-        return $this;
-    }
+    public function getCoverImage(): ?string { return $this->coverImage; }
+    public function setCoverImage(string $coverImage): self { $this->coverImage = $coverImage; return $this; }
 
-    public function getModel(): ?string
+    public function getDescription(): ?string { return $this->description; }
+    public function setDescription(string $description): self { $this->description = $description; return $this; }
 
-    {
-        return $this->model;
-    }
-    public function setModel(string $model): static
+    public function getBrand(): ?string { return $this->brand; }
+    public function setBrand(string $brand): self { $this->brand = $brand; return $this; }
 
-    {
-        $this->model = $model; return $this;
-    }
+    public function getModel(): ?string { return $this->model; }
+    public function setModel(string $model): self { $this->model = $model; return $this; }
 
-    public function getDescription(): ?string
+    public function getOwners(): ?int { return $this->owners; }
+    public function setOwners(int $owners): self { $this->owners = $owners; return $this; }
 
-    {
-        return $this->description;
-    }
-    public function setDescription(string $description): static
+    public function getEngine(): ?string { return $this->engine; }
+    public function setEngine(string $engine): self { $this->engine = $engine; return $this; }
 
-    {
-        $this->description = $description;
+    public function getPower(): ?int { return $this->power; }
+    public function setPower(int $power): self { $this->power = $power; return $this; }
 
-        return $this;
-    }
+    public function getFuel(): ?string { return $this->fuel; }
+    public function setFuel(string $fuel): self { $this->fuel = $fuel; return $this; }
 
-    public function getPrice(): ?int
+    public function getYear(): ?int { return $this->year; }
+    public function setYear(int $year): self { $this->year = $year; return $this; }
 
-    {
-        return $this->price;
-    }
-    public function setPrice(int $price): static
+    public function getTransmission(): ?string { return $this->transmission; }
+    public function setTransmission(string $transmission): self { $this->transmission = $transmission; return $this; }
 
-    {
-        $this->price = $price;
+    public function getOptions(): ?string { return $this->options; }
+    public function setOptions(string $options): self { $this->options = $options; return $this; }
 
-        return $this;
-    }
-
-    public function getKm(): ?int
-
-    {
-        return $this->km;
-    }
-    public function setKm(int $km): static
-
-    {
-        $this->km = $km;
-
-        return $this;
-    }
-
-    public function getCoverImage(): ?string
-
-    {
-        return $this->coverImage;
-    }
-    public function setCoverImage(string $coverImage): static
-
-    {
-        $this->coverImage = $coverImage;
-
-        return $this;
-    }
-
-    public function getAnnee(): ?int
-
-    {
-        return $this->annee;
-    }
-    public function setAnnee(int $annee): static
-
-    {
-        $this->annee = $annee;
-
-        return $this;
-    }
-
-    public function getNbProprietaires(): ?int
-
-    {
-        return $this->nbProprietaires;
-    }
-    public function setNbProprietaires(int $nbProprietaires): static
-
-    {
-        $this->nbProprietaires = $nbProprietaires;
-
-        return $this;
-    }
-
-    public function getCylindree(): ?string
-
-    {
-        return $this->cylindree;
-    }
-    public function setCylindree(string $cylindree): static
-
-    {
-        $this->cylindree = $cylindree;
-
-        return $this;
-    }
-
-    public function getPuissance(): ?int
-
-    {
-        return $this->puissance;
-    }
-    public function setPuissance(int $puissance): static
-
-    {
-        $this->puissance = $puissance;
-
-        return $this;
-    }
-
-    public function getCarburant(): ?string
-
-    {
-        return $this->carburant;
-    }
-    public function setCarburant(string $carburant): static
-
-    {
-        $this->carburant = $carburant;
-
-        return $this;
-    }
-
-    public function getTransmission(): ?string
-
-    {
-        return $this->transmission;
-    }
-    public function setTransmission(string $transmission): static
-
-    {
-        $this->transmission = $transmission;
-
-        return $this;
-    }
-
-    public function getOptions(): ?string
-
-    {
-        return $this->options;
-    }
-    public function setOptions(string $options): static
-
-    {
-        $this->options = $options;
-
-        return $this;
-    }
-
-    public function getBrand(): ?Brand
-
-    {
-        return $this->brand;
-    }
-    public function setBrand(?Brand $brand): static
-
-    {
-        $this->brand = $brand;
-
-        return $this;
-    }
-
-    public function getAuthor(): ?User
-
-    {
-        return $this->author;
-    }
-    public function setAuthor(?User $author): static
-
-    {
-        $this->author = $author;
-
-        return $this;
-    }
+    public function getAuthor(): ?User { return $this->author; }
+    public function setAuthor(?User $author): self { $this->author = $author; return $this; }
 
     /** @return Collection<int, Image> */
-    public function getImages(): Collection
+    public function getImages(): Collection { return $this->images; }
 
-    {
-        return $this->images;
-    }
-
-    public function addImage(Image $image): static
+    public function addImage(Image $image): self
     {
         if (!$this->images->contains($image)) {
             $this->images->add($image);
@@ -326,7 +152,7 @@ class Ad
         return $this;
     }
 
-    public function removeImage(Image $image): static
+    public function removeImage(Image $image): self
     {
         if ($this->images->removeElement($image)) {
             if ($image->getAd() === $this) {

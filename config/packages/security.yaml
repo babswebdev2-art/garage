@@ -1,59 +1,22 @@
 security:
-    # https://symfony.com/doc/current/security.html#registering-the-user-hashing-passwords
     password_hashers:
         Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface: 'auto'
 
-    # https://symfony.com/doc/current/security.html#loading-the-user-the-user-provider
     providers:
-        # users_in_memory: { memory: null } <--- On remplace ceci par votre entité User
         app_user_provider:
             entity:
                 class: App\Entity\User
                 property: email
 
     firewalls:
-        dev:
-            # Ensure dev tools and static assets are always allowed
-            pattern: ^/(_profiler|_wdt|assets|build)/
-            security: false
         main:
             lazy: true
-            provider: app_user_provider # Utilise maintenant votre base de données
-
-            # Configuration de la connexion par formulaire
+            provider: app_user_provider
             form_login:
                 login_path: account_login
                 check_path: account_login
-                username_parameter: _username
-                password_parameter: _password
-                default_target_path: home # Ou la route de votre choix après connexion
-
-            # Configuration de la déconnexion
             logout:
                 path: account_logout
-                target: account_login
 
-            # Activate different ways to authenticate:
-            # https://symfony.com/doc/current/security.html#the-firewall
-
-            # https://symfony.com/doc/current/security/impersonating_user.html
-            # switch_user: true
-
-    # Note: Only the *first* matching rule is applied
     access_control:
-        # On sécurise l'ajout et la modification de voitures pour l'Admin (Cahier des charges)
-        - { path: ^/ad/new, roles: ROLE_ADMIN }
-        - { path: ^/ad/.+/edit, roles: ROLE_ADMIN }
-        # - { path: ^/admin, roles: ROLE_ADMIN }
-        # - { path: ^/profile, roles: ROLE_USER }
-
-when@test:
-    security:
-        password_hashers:
-            # Password hashers are resource-intensive by design to ensure security.
-            # In tests, it's safe to reduce their cost to improve performance.
-            Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface:
-                algorithm: auto
-                cost: 4 # Lowest possible value for bcrypt
-                time_cost: 3 # Lowest possible value for argon
-                memory_cost: 10 # Lowest possible value for argon
+        - { path: ^/admin, roles: ROLE_USER }

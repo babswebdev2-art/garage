@@ -1,0 +1,24 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Ajouter une voiture{% endblock %}
+
+{% block body %}
+    <div class="container mt-5 mb-5">
+        <h1 class="mb-4">Créer une nouvelle annonce</h1>
+
+        {{ form_start(form) }}
+        <div class="row">
+            <div class="col-md-6">{{ form_row(form.brand) }}</div>
+            <div class="col-md-6">{{ form_row(form.model) }}</div>
+        </div>
+        <div class="row">
+            <div class="col-md-4">{{ form_row(form.price) }}</div>
+            <div class="col-md-4">{{ form_row(form.km) }}</div>
+            <div class="col-md-4">{{ form_row(form.year) }}</div>
+        </div>
+        {{ form_rest(form) }}
+
+        <button type="submit" class="btn btn-success mt-3">Enregistrer la voiture</button>
+        {{ form_end(form) }}
+    </div>
+{% endblock %}

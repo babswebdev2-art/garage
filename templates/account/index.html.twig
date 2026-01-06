@@ -1,59 +1,23 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Connexion Administration -BabsGarage{% endblock %}
+{% block title %}Mon Profil - BabsGarage{% endblock %}
 
 {% block body %}
-    <div class="container mt-5">
-        <div class="row">
-            <div class="col-md-6 offset-md-3 bg-light p-4 shadow-sm rounded border">
-                <h1 class="h2 mb-4"><i class="fas fa-user-shield me-2"></i>Connexion</h1>
-
-                {# Gestion des erreurs d'authentification standard de Symfony #}
-                {% if hasError %}
-                    <div class="alert alert-danger shadow-sm">
-                        <i class="fas fa-exclamation-triangle me-2"></i>
-                        Une erreur est survenue : l'identifiant ou le mot de passe est invalide.
-                    </div>
-                {% endif %}
-
-                {# Gestion d'un message d'erreur #}
-                {% if loginError %}
-                    <div class="alert alert-warning my-2 shadow-sm">
-                        {{ loginError }}
-                    </div>
-                {% endif %}
-
-                <form action="{{ path('account_login') }}" method="POST">
-                    <div class="form-group my-3">
-                        <label for="email" class="form-label">Adresse E-Mail</label>
-                        <input type="text"
-                               name="_username"
-                               id="email"
-                               class="form-control"
-                               placeholder="admin@garage.fr"
-                               required
-                               value="{{ username }}">
-                    </div>
-
-                    <div class="form-group my-3">
-                        <label for="password" class="form-label">Mot de passe</label>
-                        <input type="password"
-                               name="_password"
-                               id="password"
-                               placeholder="Votre mot de passe"
-                               class="form-control"
-                               required>
-                    </div>
-
+    <div class="container py-5">
+        <div class="row align-items-center">
+            <div class="col-md-3 text-center">
+                <img src="{{ app.user.picture }}" class="avatar mb-3" alt="Avatar de {{ app.user.firstName }}">
+                <h2>{{ app.user.fullName }}</h2>
+                <span class="badge bg-primary">Membre</span>
+            </div>
+            <div class="col-md-9">
+                <div class="card p-4 shadow-sm border-0">
+                    <h3>Mes informations</h3>
                     <hr>
-
-                    <div class="form-group d-flex justify-content-between align-items-center">
-                        <button type="submit" class="btn btn-success btn-lg px-4">
-                            <i class="fas fa-sign-in-alt me-2"></i>Connexion
-                        </button>
-                        <a href="{{ path('homepage') }}" class="text-muted text-decoration-none">Retour au site</a>
-                    </div>
-                </form>
+                    <p><strong>Email :</strong> {{ app.user.email }}</p>
+                    <p><strong>Rôle :</strong> {{ app.user.roles[0] }}</p>
+                    <a href="{{ path('account_profile') }}" class="btn btn-outline-primary">Modifier mon profil</a>
+                </div>
             </div>
         </div>
     </div>

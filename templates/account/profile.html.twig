@@ -1,0 +1,26 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Modification du profil - BabsGarage{% endblock %}
+
+{% block body %}
+    <div class="container py-5">
+        <h1 class="mb-5 text-center">Modifier mon profil</h1>
+
+        <div class="row justify-content-center">
+            <div class="col-md-8 card shadow border-0 p-4">
+                {{ form_start(form) }}
+                <div class="row">
+                    <div class="col">{{ form_row(form.firstName) }}</div>
+                    <div class="col">{{ form_row(form.lastName) }}</div>
+                </div>
+                {{ form_row(form.email) }}
+                {{ form_row(form.picture) }}
+                {{ form_row(form.introduction) }}
+                {{ form_row(form.description) }}
+
+                <button type="submit" class="btn btn-primary w-100 mt-4">Enregistrer les modifications</button>
+                {{ form_end(form) }}
+            </div>
+        </div>
+    </div>
+{% endblock %}

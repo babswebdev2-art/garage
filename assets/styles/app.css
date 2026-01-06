@@ -1,23 +1,32 @@
-.container{
-    margin-top: 20px;
-}
+.full { min-height: 80vh; }
+.container { margin-top: 20px; }
 
-htgammeimg{
-    height: 200px;
+/* Avatars adaptables */
+.avatar { max-width: 128px; height: 128px; border-radius: 50%; object-fit: cover; }
+.avatar-medium { max-width: 64px; height: 64px; border-radius: 50%; object-fit: cover; }
+/* Pour le showroom */
+.starsimg {
+    height: 200px; /* Obligatoire pour que l'image apparaisse */
     width: 100%;
     display: block;
+    object-fit: cover; /* Important : évite de déformer les photos des voitures */
+    background-color: #eee; /* Couleur de fond si l'image charge mal */
+}
+
+/* Pour les avatars dans le showroom */
+.avatar-mini {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
     object-fit: cover;
+    border: 1px solid #ccc;
 }
-
-.annonce-tittle{
-    padding: 2em;
+/* Header de l'annonce */
+.annonce-title {
+    padding: 6em 1em; /* Un peu plus de padding pour le rendu */
     background-size: cover;
-    background-position: center center;
-}
-
-.annonce-tittle h1, anonce-tittle p{
+    background-position: center;
     color: white;
-    text-shadow: 3px 3px 3px rgba(0,0,0,0.5);
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.8);
+    position: relative;
 }
-
-
