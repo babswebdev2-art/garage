@@ -1,80 +1,90 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Annonce - {{ ad.brand }} {{ ad.model }}{% endblock %}
+{% block title %}BabsGarage - {{ ad.brand }} {{ ad.model }}{% endblock %}
 
 {% block body %}
-    {# 1. BANDEAU DE TITRE #}
-    <div class="annonce-title" style="background-image: url({{ ad.coverImage }}); background-size: cover; background-position: center; padding: 5rem 0; position: relative; color: white;">
-        <div class="container text-center py-5" style="text-shadow: 2px 2px 4px rgba(0,0,0,0.8);">
-            <h1 class="display-4 fw-bold">{{ ad.brand }} {{ ad.model }}</h1>
-            <p class="h2"><strong>{{ ad.price | number_format(0, ',', ' ') }} €</strong></p>
+    <div class="annonce-title" style="background-image: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url({{ ad.coverImage }}); background-size: cover; background-position: center; padding: 100px 0; color: white; text-shadow: 2px 2px 4px rgba(0,0,0,0.8);">
+        <div class="container text-center">
+            <h1 class="display-3">{{ ad.title }}</h1>
+            <p class="lead">{{ ad.brand }} {{ ad.model }} - Édition {{ ad.year }}</p>
+            <p class="h2">
+                <strong>{{ ad.kilometers|number_format(0, ',', ' ') }} KM</strong> pour
+                <span class="badge bg-success">{{ ad.price|number_format(0, ',', ' ') }} €</span>
+            </p>
 
             <div class="mt-4">
+                <a href="mailto:{{ ad.author.email }}" class="btn btn-primary btn-lg">Contacter le vendeur</a>
+
+                {# Gestion de l'annonce par l'auteur ou l'admin #}
                 {% if (app.user and app.user == ad.author) or is_granted("ROLE_ADMIN") %}
-                    {# LIENS CORRIGÉS ICI #}
-                    <a href="{{ path('admin_ads_edit', {'id': ad.id}) }}" class="btn btn-warning m-2 shadow">Modifier l'annonce</a>
-                    <a href="{{ path('admin_ads_delete', {'id': ad.id}) }}"
-                       class="btn btn-danger m-2 shadow"
-                       onclick="return confirm('Voulez-vous vraiment supprimer cette annonce ?')">
-                       Supprimer l'annonce
-                    </a>
+                    <a href="{{ path('ads_edit', {'slug': ad.slug}) }}" class="btn btn-warning m-2">Modifier l'annonce</a>
+                    <a href="{{ path('ads_delete', {'slug': ad.slug}) }}" class="btn btn-danger m-2" onclick="return confirm('Supprimer cette voiture ?')">Supprimer</a>
                 {% endif %}
             </div>
         </div>
     </div>
 
-    <div class="container mt-5 mb-5">
+    <div class="container mt-5">
         <div class="row">
-            {# COLONNE GAUCHE #}
-            <div class="col-md-8">
-                <div class="card p-4 mb-4 shadow-sm border-0">
-                    <h3>Description</h3>
-                    <p class="mt-3">{{ ad.description | nl2br }}</p>
-
-                    <h4 class="mt-4 border-bottom pb-2">Options</h4>
-                    <div class="bg-light p-3 rounded border">
-                        {{ ad.options | default('Aucune option spécifiée') }}
-                    </div>
+            <div class="col-md-8 mb-3">
+                <div class="card border-0 shadow-sm p-4 mb-4">
+                    <h3>Description du véhicule</h3>
+                    <hr>
+                    {{ ad.description | raw | nl2br }}
                 </div>
 
-                {# CARROUSEL #}
-                <div class="bd-example shadow-sm rounded overflow-hidden">
-                    <div id="carouselExampleCaptions" class="carousel slide" data-bs-ride="carousel">
-                        <div class="carousel-inner">
-                            {% for image in ad.images %}
-                                <div class="carousel-item {% if loop.first %}active{% endif %}">
-                                    <img src="{{ image.url }}" class="d-block w-100" style="height: 450px; object-fit: cover;">
-                                </div>
-                            {% endfor %}
+                {# Carrousel d'images #}
+                {% if ad.images|length > 0 %}
+                    <div class="shadow rounded overflow-hidden">
+                        <div id="carCarousel" class="carousel slide" data-bs-ride="carousel">
+                            <div class="carousel-indicators">
+                                {% for image in ad.images %}
+                                    <button type="button" data-bs-target="#carCarousel" data-bs-slide-to="{{ loop.index0 }}" {% if loop.first %} class="active" aria-current="true" {% endif %}></button>
+                                {% endfor %}
+                            </div>
+                            <div class="carousel-inner">
+                                {% for image in ad.images %}
+                                    <div class="carousel-item {% if loop.first %}active{% endif %}">
+                                        <img src="{{ image.url }}" class="d-block w-100" alt="Photo" style="height: 500px; object-fit: cover;">
+                                        {% if image.caption %}
+                                            <div class="carousel-caption d-none d-md-block bg-dark bg-opacity-50 rounded">
+                                                <p>{{ image.caption }}</p>
+                                            </div>
+                                        {% endif %}
+                                    </div>
+                                {% endfor %}
+                            </div>
+                            <button class="carousel-control-prev" type="button" data-bs-target="#carCarousel" data-bs-slide="prev">
+                                <span class="carousel-control-prev-icon"></span>
+                            </button>
+                            <button class="carousel-control-next" type="button" data-bs-target="#carCarousel" data-bs-slide="next">
+                                <span class="carousel-control-next-icon"></span>
+                            </button>
                         </div>
-                        <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="prev">
-                            <span class="carousel-control-prev-icon"></span>
-                        </button>
-                        <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="next">
-                            <span class="carousel-control-next-icon"></span>
-                        </button>
                     </div>
-                </div>
+                {% endif %}
             </div>
 
-            {# COLONNE DROITE #}
+            {# Colonne de l'auteur #}
             <div class="col-md-4">
-                <div class="card bg-dark text-white p-4 mb-4 border-0 shadow">
-                    <h4 class="text-primary border-bottom border-primary pb-2 mb-3">Fiche Technique</h4>
-                    <ul class="list-unstyled">
-                        <li class="d-flex justify-content-between mb-2"><span>KM :</span> <strong>{{ ad.km }}</strong></li>
-                        <li class="d-flex justify-content-between mb-2"><span>Année :</span> <strong>{{ ad.year }}</strong></li>
-                        <li class="d-flex justify-content-between mb-2"><span>Énergie :</span> <strong>{{ ad.fuel }}</strong></li>
-                    </ul>
-                </div>
-
                 {% set a = ad.author %}
-                <div class="card p-4 shadow-sm border-0 text-center bg-light">
-                   <h5>{{ a.firstName }} {{ a.lastName }}</h5>
-                   <p class="text-muted small">Conseiller Garage</p>
-                   <div class="text-start small mt-3">
+                <div class="card border-0 shadow-sm p-4 text-center">
+                    {# ATTENTION : ici on utilise 'slug' car on vient de l'ajouter à l'entité #}
+                    <a href="{{ path('user_show', {'slug': a.slug}) }}" class="text-decoration-none text-dark">
+                        {% if a.picture %}
+                            <img src="{{ a.picture }}" alt="Avatar" class="rounded-circle shadow mb-3" style="width: 100px; height: 100px; object-fit: cover;">
+                        {% else %}
+                            <img src="https://via.placeholder.com/100" alt="Avatar par défaut" class="rounded-circle mb-3">
+                        {% endif %}
+                        <h3>{{ a.fullName }}</h3>
+                    </a>
+                    <hr>
+                    <p class="text-muted small"><em>" {{ a.introduction }} "</em></p>
+                    <span class="badge bg-secondary mb-3">{{ a.ads | length }} voiture(s) en vente</span>
+
+                    <div class="text-start small">
                         {{ a.description | raw | nl2br }}
-                   </div>
+                    </div>
                 </div>
             </div>
         </div>

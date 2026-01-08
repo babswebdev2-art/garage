@@ -15,8 +15,11 @@ security:
             form_login:
                 login_path: account_login
                 check_path: account_login
+                default_target_path: account_index # Redirige vers le profil
             logout:
                 path: account_logout
+                target: homepage
 
     access_control:
-        - { path: ^/admin, roles: ROLE_USER }
+        - { path: ^/ads/new, roles: ROLE_ADMIN }
+        - { path: ^/ads/.+/edit, roles: ROLE_ADMIN }

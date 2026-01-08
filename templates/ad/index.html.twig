@@ -1,16 +1,21 @@
 {% extends 'base.html.twig' %}
+
+{% block title %}Notre Showroom{% endblock %}
+
 {% block body %}
-    <div class="container mt-4">
-        <h1 class="mb-4">Nos véhicules d'occasion</h1>
+    <div class="container mt-5">
+        <h1>Nos voitures en vente</h1>
+
         <div class="row">
             {% for ad in ads %}
                 <div class="col-md-4 mb-4">
                     <div class="card shadow-sm">
-                        <img src="{{ ad.coverImage }}" class="card-img-top" style="height: 200px; object-fit: cover;">
+                        <img src="{{ ad.coverImage }}" class="card-img-top" alt="Image de {{ ad.title }}">
                         <div class="card-body">
-                            <h5>{{ ad.brand }} {{ ad.model }}</h5>
-                            <p class="text-muted">{{ ad.km | number_format(0, '', ' ') }} KM | {{ ad.price | number_format(0, '', ' ') }} €</p>
-                            <a href="{{ path('ads_show', {'slug': ad.slug}) }}" class="btn btn-outline-primary w-100">Détails</a>
+                            <h5 class="card-title">{{ ad.brand }} {{ ad.model }}</h5>
+                            <p class="card-text text-muted">{{ ad.kilometers }} KM</p>
+                            <h4 class="text-primary">{{ ad.price }} €</h4>
+                            <a href="{{ path('ads_show', {'slug': ad.slug}) }}" class="btn btn-outline-info">Voir les détails</a>
                         </div>
                     </div>
                 </div>

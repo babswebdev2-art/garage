@@ -1,51 +1,29 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Tableau de bord - BabsGarage{% endblock %}
+{% block title %}Dashboard - BabsGarage{% endblock %}
 
 {% block body %}
     <div class="container mt-5">
-        <div class="row">
-            <div class="col-12 mb-4">
-                <h1 class="display-4">Statistiques du Garage</h1>
-                <p class="lead">Bienvenue dans votre espace de gestion, {{ app.user.fullName }} !</p>
-            </div>
-        </div>
+        <h1 class="display-4">Statistiques du Garage</h1>
+        <p class="lead">Bienvenue, {{ app.user.fullName }} !</p>
 
-        <div class="row">
-            {# Carte des Annonces #}
+        <div class="row mt-4">
             <div class="col-md-6 mb-3">
                 <div class="card bg-primary text-white shadow">
-                    <div class="card-body text-center">
-                        <div class="row align-items-center">
-                            <div class="col-4">
-                                <i class="fas fa-car fa-4x"></i>
-                            </div>
-                            <div class="col-8">
-                                <h4 class="card-title">Voitures en vente</h4>
-                                <p class="display-3">{{ stats.ads }}</p>
-                            </div>
-                        </div>
-                        <hr>
-                        <a href="{{ path('ads_index') }}" class="btn btn-light btn-sm">Voir les annonces</a>
+                    <div class="card-body text-center p-5">
+                        <h4 class="card-title">Voitures en vente</h4>
+                        <p class="display-2">{{ stats.ads }}</p>
+                        <a href="{{ path('ads_index') }}" class="btn btn-light">Gérer les annonces</a>
                     </div>
                 </div>
             </div>
 
-            {# Carte des Utilisateurs (Admins) #}
             <div class="col-md-6 mb-3">
                 <div class="card bg-success text-white shadow">
-                    <div class="card-body text-center">
-                        <div class="row align-items-center">
-                            <div class="col-4">
-                                <i class="fas fa-users fa-4x"></i>
-                            </div>
-                            <div class="col-8">
-                                <h4 class="card-title">Membres de l'équipe</h4>
-                                <p class="display-3">{{ stats.users }}</p>
-                            </div>
-                        </div>
-                        <hr>
-                        <a href="#" class="btn btn-light btn-sm">Gérer les membres</a>
+                    <div class="card-body text-center p-5">
+                        <h4 class="card-title">Membres de l'équipe</h4>
+                        <p class="display-2">{{ stats.users }}</p>
+                        <a href="{{ path('ads_create') }}" class="btn btn-light">Ajouter un véhicule</a>
                     </div>
                 </div>
             </div>

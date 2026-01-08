@@ -18,15 +18,17 @@ class AccountType extends AbstractType
         $builder
             ->add('firstName', TextType::class, ['label' => "Prénom"])
             ->add('lastName', TextType::class, ['label' => "Nom"])
-            ->add('email', EmailType::class, ['label' => "Adresse Email"])
+            ->add('email', EmailType::class, ['label' => "Email"])
             ->add('picture', UrlType::class, ['label' => "Photo de profil (URL)"])
-            ->add('introduction', TextType::class, ['label' => "Présentation courte"])
-            ->add('description', TextareaType::class, ['label' => "Description détaillée", 'attr' => ['rows' => 5]])
+            ->add('introduction', TextType::class, ['label' => "Introduction courte"])
+            ->add('description', TextareaType::class, ['label' => "Description détaillée"])
         ;
     }
 
     public function configureOptions(OptionsResolver $resolver): void
     {
-        $resolver->setDefaults(['data_class' => User::class]);
+        $resolver->setDefaults([
+            'data_class' => User::class,
+        ]);
     }
 }

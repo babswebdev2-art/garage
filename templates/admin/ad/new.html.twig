@@ -4,21 +4,30 @@
 
 {% block body %}
     <div class="container mt-5 mb-5">
-        <h1 class="mb-4">Créer une nouvelle annonce</h1>
+        <div class="card shadow border-0">
+            <div class="card-header bg-dark text-white">
+                <h2 class="mb-0">Créer une nouvelle annonce</h2>
+            </div>
+            <div class="card-body p-4">
+                {{ form_start(form) }}
+                <div class="row">
+                    <div class="col-md-6">{{ form_row(form.brand) }}</div>
+                    <div class="col-md-6">{{ form_row(form.model) }}</div>
+                </div>
+                <div class="row">
+                    <div class="col-md-4">{{ form_row(form.price) }}</div>
+                    <div class="col-md-4">{{ form_row(form.kilometers) }}</div>
+                    <div class="col-md-4">{{ form_row(form.year) }}</div>
+                </div>
 
-        {{ form_start(form) }}
-        <div class="row">
-            <div class="col-md-6">{{ form_row(form.brand) }}</div>
-            <div class="col-md-6">{{ form_row(form.model) }}</div>
-        </div>
-        <div class="row">
-            <div class="col-md-4">{{ form_row(form.price) }}</div>
-            <div class="col-md-4">{{ form_row(form.km) }}</div>
-            <div class="col-md-4">{{ form_row(form.year) }}</div>
-        </div>
-        {{ form_rest(form) }}
+                <hr>
+                <h5>Détails techniques</h5>
+                {{ form_rest(form) }}
 
-        <button type="submit" class="btn btn-success mt-3">Enregistrer la voiture</button>
-        {{ form_end(form) }}
+                <button type="submit" class="btn btn-success btn-lg mt-3 shadow">Publier l'annonce</button>
+                <a href="{{ path('ads_index') }}" class="btn btn-link mt-3 text-secondary">Retour au showroom</a>
+                {{ form_end(form) }}
+            </div>
+        </div>
     </div>
 {% endblock %}

@@ -1,0 +1,43 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Vendre un véhicule{% endblock %}
+
+{% block body %}
+    <div class="container py-5">
+        <div class="row justify-content-center">
+            <div class="col-md-10">
+                <div class="card shadow border-0">
+                    <div class="card-header bg-dark text-white py-3 text-center">
+                        <h2 class="h4 mb-0 fw-bold">Déposer une nouvelle annonce</h2>
+                    </div>
+                    <div class="card-body p-5">
+                        {{ form_start(form) }}
+
+                        <div class="row">
+                            <div class="col-md-6">{{ form_row(form.brand) }}</div>
+                            <div class="col-md-6">{{ form_row(form.model) }}</div>
+                        </div>
+
+                        <div class="row mt-3">
+                            <div class="col-md-4">{{ form_row(form.price) }}</div>
+                            <div class="col-md-4">{{ form_row(form.kilometers) }}</div>
+                            <div class="col-md-4">{{ form_row(form.year) }}</div>
+                        </div>
+
+                        <div class="mt-4">
+                            {{ form_rest(form) }}
+                        </div>
+
+                        <div class="mt-5 d-grid">
+                            <button type="submit" class="btn btn-primary btn-lg shadow">
+                                <i class="fas fa-paper-plane me-2"></i>Publier mon annonce
+                            </button>
+                        </div>
+
+                        {{ form_end(form) }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

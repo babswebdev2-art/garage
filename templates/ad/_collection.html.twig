@@ -1,24 +1,55 @@
+{# 1. Bloc global qui entoure toute la section des images #}
 {% block _ad_images_widget %}
-    <div id="ad_images" data-prototype="{{ form_widget(form.vars.prototype)|e('html_attr') }}">
-        {{ form_widget(form) }}
+    <div class="mt-4">
+        <label class="form-label h5">Galerie d'images</label>
+        <p class="text-muted small">Ajoutez ici les URLs des photos du véhicule pour la galerie.</p>
+
+        <div id="ad_images" data-prototype="{{ form_widget(form.vars.prototype)|e('html_attr') }}">
+            {% for imageField in form %}
+                {{ form_row(imageField) }}
+            {% endfor %}
+        </div>
+
+        <input type="hidden" id="widgets-counter" value="{{ form|length }}">
+
+        <div class="form-group mt-3">
+            <button type="button" id="add-image" class="btn btn-outline-primary btn-sm">
+                <i class="fas fa-plus"></i> Ajouter une image
+            </button>
+        </div>
     </div>
-    <input type="hidden" id="widgets-counter" value="{{ form|length }}">
-    <button type="button" id="add-image" class="btn btn-primary mt-2">
-        <i class="fas fa-plus"></i> Ajouter une photo
-    </button>
 {% endblock %}
 
-{% block _ad_images_entry_row %}
-    <div class="form-group mb-3" id="block_{{ id }}">
-        <div class="row">
-            <div class="col-10">
-                {{ form_widget(form) }}
-            </div>
-            <div class="col-2">
-                <button type="button" data-action="delete" data-target="#block_{{ id }}" class="btn btn-danger">
-                    <i class="fas fa-trash"></i>
-                </button>
+{# 2. Bloc qui définit le design d'une seule ligne d'image (une entrée) #}
+{% block _ad_images_entry_widget %}
+    <div class="card bg-light mb-3 border-0 shadow-sm" id="block_{{ id }}">
+        <div class="card-body">
+            <div class="row align-items-center">
+                <div class="col-10">
+                    <div class="row">
+                        <div class="col-md-6">
+                            {# Affiche uniquement le champ URL sans son label global s'il est déjà dans le sous-formulaire #}
+                            {{ form_row(form.url) }}
+                        </div>
+                        <div class="col-md-6">
+                            {{ form_row(form.caption) }}
+                        </div>
+                    </div>
+                </div>
+                <div class="col-2 text-end">
+                    <button type="button"
+                            data-action="delete"
+                            data-target="#block_{{ id }}"
+                            class="btn btn-danger btn-sm">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </div>
             </div>
         </div>
     </div>
+{% endblock %}
+
+{# 3. On enlève les labels automatiques pour éviter les répétitions inutiles #}
+{% block _ad_images_entry_row %}
+    {{ form_widget(form) }}
 {% endblock %}

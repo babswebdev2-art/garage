@@ -1,19 +1,18 @@
 .full { min-height: 80vh; }
 .container { margin-top: 20px; }
 
-/* Avatars adaptables */
 .avatar { max-width: 128px; height: 128px; border-radius: 50%; object-fit: cover; }
 .avatar-medium { max-width: 64px; height: 64px; border-radius: 50%; object-fit: cover; }
-/* Pour le showroom */
+
 .starsimg {
-    height: 200px; /* Obligatoire pour que l'image apparaisse */
+    height: 200px; 
     width: 100%;
     display: block;
-    object-fit: cover; /* Important : évite de déformer les photos des voitures */
-    background-color: #eee; /* Couleur de fond si l'image charge mal */
+    object-fit: cover; /
+    background-color: #eee; 
 }
 
-/* Pour les avatars dans le showroom */
+
 .avatar-mini {
     width: 32px;
     height: 32px;
@@ -21,9 +20,9 @@
     object-fit: cover;
     border: 1px solid #ccc;
 }
-/* Header de l'annonce */
+
 .annonce-title {
-    padding: 6em 1em; /* Un peu plus de padding pour le rendu */
+    padding: 6em 1em; 
     background-size: cover;
     background-position: center;
     color: white;

@@ -5,19 +5,83 @@
 {% block body %}
     <div class="container py-5">
         <div class="row align-items-center">
+
+            {# Colonne de gauche : Avatar et Identité #}
             <div class="col-md-3 text-center">
-                <img src="{{ app.user.picture }}" class="avatar mb-3" alt="Avatar de {{ app.user.firstName }}">
-                <h2>{{ app.user.fullName }}</h2>
-                <span class="badge bg-primary">Membre</span>
-            </div>
-            <div class="col-md-9">
-                <div class="card p-4 shadow-sm border-0">
-                    <h3>Mes informations</h3>
-                    <hr>
-                    <p><strong>Email :</strong> {{ app.user.email }}</p>
-                    <p><strong>Rôle :</strong> {{ app.user.roles[0] }}</p>
-                    <a href="{{ path('account_profile') }}" class="btn btn-outline-primary">Modifier mon profil</a>
+                <div class="position-relative d-inline-block">
+                    <img src="{{ app.user.picture ?: 'https://via.placeholder.com/150' }}"
+                         class="rounded-circle mb-3 shadow border border-3 border-white"
+                         alt="Avatar de {{ app.user.firstName }}"
+                         style="width: 150px; height: 150px; object-fit: cover;">
                 </div>
+                <h2 class="h4 mb-0">{{ app.user.fullName }}</h2>
+                <p class="text-muted small">Membre depuis peu</p>
+
+                {% if 'ROLE_ADMIN' in app.user.roles %}
+                    <span class="badge bg-danger">Administrateur</span>
+                {% else %}
+                    <span class="badge bg-primary">Membre</span>
+                {% endif %}
+            </div>
+
+            {# Colonne de droite : Détails du compte #}
+            <div class="col-md-9">
+                <div class="card p-4 shadow-sm border-0 bg-light">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h3 class="mb-0">Mes informations personnelles</h3>
+                        <span class="text-muted"><i class="fas fa-user-shield"></i> Compte sécurisé</span>
+                    </div>
+                    <hr>
+
+                    <div class="row">
+                        <div class="col-sm-6 mb-3">
+                            <label class="text-uppercase small fw-bold text-muted">Prénom</label>
+                            <p class="fs-5">{{ app.user.firstName }}</p>
+                        </div>
+                        <div class="col-sm-6 mb-3">
+                            <label class="text-uppercase small fw-bold text-muted">Nom</label>
+                            <p class="fs-5">{{ app.user.lastName }}</p>
+                        </div>
+                        <div class="col-sm-6 mb-3">
+                            <label class="text-uppercase small fw-bold text-muted">Adresse Email</label>
+                            <p class="fs-5">{{ app.user.email }}</p>
+                        </div>
+                        <div class="col-sm-6 mb-3">
+                            <label class="text-uppercase small fw-bold text-muted">Introduction</label>
+                            <p class="fs-5 text-truncate">{{ app.user.introduction ?: 'Aucune introduction renseignée.' }}</p>
+                        </div>
+                    </div>
+
+                    <div class="mt-4 pt-3 border-top">
+                        <a href="{{ path('account_profile') }}" class="btn btn-primary px-4">
+                            <i class="fas fa-user-edit me-2"></i>Modifier mon profil
+                        </a>
+                        <a href="{{ path('ads_create') }}" class="btn btn-success ms-2 px-4">
+                            <i class="fas fa-plus me-2"></i>Vendre une voiture
+                        </a>
+                        <a href="{{ path('account_password') }}" class="btn btn-outline-secondary ms-2 px-4">
+                            <i class="fas fa-lock me-2"></i>Sécurité
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {# Optionnel : Afficher les annonces de l'utilisateur directement ici #}
+        <div class="mt-5">
+            <h4 class="mb-4">Mes annonces en ligne ({{ app.user.ads|length }})</h4>
+            <div class="row">
+                {% for ad in app.user.ads %}
+                    <div class="col-md-4 mb-3">
+                        <div class="card shadow-sm h-100">
+                            <img src="{{ ad.coverImage }}" class="card-img-top" style="height: 150px; object-fit: cover;">
+                            <div class="card-body">
+                                <h6 class="card-title">{{ ad.title }}</h6>
+                                <a href="{{ path('ads_show', {'slug': ad.slug}) }}" class="btn btn-sm btn-link p-0">Gérer l'annonce</a>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
             </div>
         </div>
     </div>

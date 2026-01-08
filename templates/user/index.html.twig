@@ -1,43 +1,26 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Profil de {{ user.fullName }}{% endblock %}
+{% block title %}Mon Profil - BabsGarage{% endblock %}
 
 {% block body %}
-    <div class="container mt-5">
-        <div class="row align-items-center mb-5 p-4 bg-light rounded shadow-sm">
+    <div class="container py-5">
+        <div class="row align-items-center">
             <div class="col-md-3 text-center">
-                {# Utilisation de ta classe .avatar #}
-                <img src="{{ user.picture }}" class="avatar shadow" alt="Avatar de {{ user.firstName }}">
+                <img src="{{ app.user.picture ?: 'https://via.placeholder.com/150' }}" class="img-fluid rounded-circle mb-3 shadow" alt="Avatar">
+                <h2>{{ app.user.firstName }} {{ app.user.lastName }}</h2>
+                <span class="badge bg-primary">Membre</span>
             </div>
             <div class="col-md-9">
-                <h1 class="display-4">{{ user.fullName }}</h1>
-                <p class="lead text-primary fw-bold">{{ user.introduction }}</p>
-                <div class="mt-3">
-                    <span class="badge bg-secondary">{{ user.ads | length }} Véhicules en vente</span>
-                    {% if app.user == user %}
-                        <a href="{{ path('account_profile') }}" class="btn btn-sm btn-outline-primary ms-2">Modifier mon profil</a>
-                    {% endif %}
-                </div>
-            </div>
-        </div>
-
-        <div class="row">
-            <div class="col-md-12">
-                <h2 class="mb-4">Le Showroom de {{ user.firstName }}</h2>
-                <div class="row">
-                    {% for ad in user.ads %}
-                        <div class="col-md-4 mb-4">
-                            <div class="card h-100 border-0 shadow-sm">
-                                {# Utilisation de ta classe .starsimg #}
-                                <img src="{{ ad.coverImage }}" class="starsimg" alt="Photo du véhicule">
-                                <div class="card-body">
-                                    <h5 class="card-title">{{ ad.title }}</h5>
-                                    <p class="card-text text-muted">{{ ad.introduction | slice(0, 80) }}...</p>
-                                    <a href="{{ path('ads_show', {'slug': ad.slug}) }}" class="btn btn-primary w-100">Détails du véhicule</a>
-                                </div>
-                            </div>
-                        </div>
-                    {% endfor %}
+                <div class="card p-4 shadow-sm border-0">
+                    <h3>Mes informations</h3>
+                    <hr>
+                    <p><strong>Email :</strong> {{ app.user.email }}</p>
+                    {# On affiche le premier rôle proprement #}
+                    <p><strong>Rôle :</strong> {{ app.user.roles[0]|replace({'ROLE_': ''}) }}</p>
+                    <div class="mt-4">
+                        <a href="{{ path('account_profile') }}" class="btn btn-outline-primary">Modifier mon profil</a>
+                        <a href="{{ path('ads_create') }}" class="btn btn-success ms-2">Ajouter une voiture</a>
+                    </div>
                 </div>
             </div>
         </div>

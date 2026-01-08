@@ -10,7 +10,6 @@ class PasswordUpdate
     private $newPassword;
     private $confirmPassword;
 
-    // --- GETTER ET SETTER POUR oldPassword ---
     public function getOldPassword(): ?string
     {
         return $this->oldPassword;
@@ -22,7 +21,6 @@ class PasswordUpdate
         return $this;
     }
 
-    // --- GETTER ET SETTER POUR newPassword ---
     public function getNewPassword(): ?string
     {
         return $this->newPassword;
@@ -34,7 +32,6 @@ class PasswordUpdate
         return $this;
     }
 
-    // --- GETTER ET SETTER POUR confirmPassword ---
     public function getConfirmPassword(): ?string
     {
         return $this->confirmPassword;

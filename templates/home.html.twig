@@ -4,14 +4,12 @@
 
 {% block body %}
     <div class="container">
-        {# Section Jumbotron adaptée à l'automobile #}
         <div class="jumbotron mt-3 bg-dark text-white p-5 rounded shadow">
             <h1 class="display-3">Bienvenue sur BabsGarage</h1>
             <p class="lead">La référence pour trouver votre prochain véhicule d'exception. Nous mettons en avant les meilleures annonces de voitures de prestige et de collection.</p>
             <hr class="my-4 bg-light">
             <p>Vous cherchez la perle rare ? Découvrez notre sélection de véhicules révisés et garantis.</p>
             <p class="lead">
-                {# Assure-toi que la route 'ads_index' existe dans ton AdController #}
                 <a href="{{ path('ads_index') }}" class="btn btn-primary btn-lg" role="button">Voir notre showroom</a>
             </p>
         </div>
@@ -19,9 +17,6 @@
         <h1 class="mt-5 mb-4 text-uppercase fw-bold"><i class="fas fa-star text-warning"></i> Nos arrivages stars</h1>
 
         <div class="row">
-            {# Ici, plus tard, tu feras une boucle {% for ad in ads %} #}
-            {# Pour l'instant, voici 3 exemples statiques adaptés à ton AdEntity #}
-
             <div class="col-md-4">
                 <div class="card bg-light mb-4 border-0 shadow-sm">
                     <div class="card-header text-center bg-primary text-white">
@@ -88,7 +83,7 @@
                     </div>
                 </div>
             </div>
-
+            
             <div class="col-md-6">
                 <div class="card border-primary mb-3 shadow-sm">
                     <div class="card-body">

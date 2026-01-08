@@ -1,16 +1,25 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Ajouter une voiture{% endblock %}
+{% block title %}Création d'une annonce{% endblock %}
+
+{# On indique à Symfony d'utiliser ce fichier pour dessiner les champs de myForm #}
+{% form_theme myForm 'ad/_collection.html.twig' %}
 
 {% block body %}
-    <div class="container mt-5">
-        <h1 class="text-primary text-uppercase mb-4">Mettre un véhicule en vente</h1>
+    <div class="container full py-5">
+        <h2 class="mb-3">Création d'une annonce</h2>
 
-        <div class="card shadow-sm border-0 p-4">
-            {{ form_start(form) }}
-            {{ form_widget(form) }}
-            <button type="submit" class="btn btn-primary btn-lg mt-3">Publier l'annonce</button>
-            {{ form_end(form) }}
-        </div>
+        {{ form_start(myForm) }}
+
+        {{ form_widget(myForm) }}
+
+        <button type="submit" class="btn btn-primary mt-3">Créer l'annonce</button>
+
+        {{ form_end(myForm) }}
     </div>
+{% endblock %}
+
+{% block javascripts %}
+    {# Ton script externe qui gère l'ajout dynamique #}
+    {{ encore_entry_script_tags('annonce') }}
 {% endblock %}
